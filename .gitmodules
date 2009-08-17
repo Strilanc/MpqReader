@@ -1,0 +1,6 @@
+[submodule "Dependency/MpqLibrary"]
+	path = Dependency/MpqLibrary
+	url = C:/Users/Craig/Documents/Visual Studio 10/Projects/MpqLibrary/MpqLibrary
+[submodule "Dependency/Strilbrary"]
+	path = Dependency/Strilbrary
+	url = C:/Users/Craig/Documents/Visual Studio 10/Projects/Strilbrary/Strilbrary
