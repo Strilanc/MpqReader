@@ -207,7 +207,7 @@ Public Class Form1
     Private Function UpdateListFile(ByVal oldEntries As Dictionary(Of ULong, String), ByVal newEntries As IEnumerable(Of String)) As Integer
         Dim n = 0
         For Each entry In newEntries
-            Dim hash = Mpq.Crypt.HashFileName(entry)
+            Dim hash = Mpq.Common.HashFileName(entry)
             If oldEntries.ContainsKey(hash) Then Continue For
             oldEntries(hash) = entry
             n += 1
@@ -233,15 +233,29 @@ Public Class Form1
         gridArchive.Rows.Add("Path", path)
         gridArchive.Rows.Add("Archive Size", curArchive.archiveSize.ToString + " bytes")
         gridArchive.Rows.Add("File Block Size", curArchive.fileBlockSize.ToString + " bytes")
-        gridArchive.Rows.Add("Archive Offset", curArchive.filePosition)
+        gridArchive.Rows.Add("Archive Offset", curArchive.archivePosition)
         gridArchive.Rows.Add("File Table Offset", curArchive.fileTablePosition)
         gridArchive.Rows.Add("Hash Table Offset", curArchive.hashTablePosition)
         gridArchive.Rows.Add("File Table Size", curArchive.numFileTableEntries.ToString + " entries")
         gridArchive.Rows.Add("Hash Table Size", curArchive.numHashTableEntries.ToString + " entries")
 
+        gridFileTable.Rows.Add("(Use 'explore' to load file table)")
+        gridHashTable.Rows.Add("(Use 'explore' to load file table)")
         Mpq.Common.readMPQListFile(curArchive, internalListFile)
-        Dim archive = curArchive
+        btnExplore.Enabled = True
+        Log("Archive loaded.")
 
+        If curArchive.fileTable.fileEntries.Count <= 128 AndAlso curArchive.hashTable.hashes.Count <= 256 Then
+            ExploreTables()
+        End If
+    End Sub
+    Private Sub ExploreTables()
+        Dim archive = curArchive
+        tabFileTable.Show()
+        tabHashTable.Show()
+        gridFileTable.Rows.Clear()
+        gridHashTable.Rows.Clear()
+        btnExplore.Enabled = False
         ThreadPooledAction(
             Sub()
                 Log("Exploring file archive...")
@@ -291,7 +305,7 @@ Public Class Form1
                                     End Sub)
                 Next i
 
-                Log("Archive loaded.")
+                Log("Archive explored.")
             End Sub)
     End Sub
 
@@ -312,6 +326,7 @@ Public Class Form1
         tabArchive.Hide()
         tabFileTable.Hide()
         tabHashTable.Hide()
+        btnExplore.Enabled = False
 
         If txtArchive.Text = "" Then
             lblArchiveResult.Text = "Required"
@@ -323,8 +338,6 @@ Public Class Form1
                 lblArchiveResult.Text = "Loaded"
                 ToolTip1.SetToolTip(lblArchiveResult, "Loaded")
                 tabArchive.Show()
-                tabFileTable.Show()
-                tabHashTable.Show()
                 numArchivedFileIndex.Maximum = curArchive.fileTable.fileEntries.Count - 1
             Catch ex As Exception
                 lblArchiveResult.Text = "Error"
@@ -455,5 +468,27 @@ Public Class Form1
         ref.QueueAction(Sub()
                             txtLog.Text += text + Environment.NewLine
                         End Sub)
+    End Sub
+
+    Private Sub btnExplore_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnExplore.Click
+        ExploreTables()
+    End Sub
+
+    Private Sub btnRepack_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRepack.Click
+        Dim d As New SaveFileDialog
+        d.InitialDirectory = IO.Path.GetDirectoryName(txtArchive.Text)
+        d.FileName = IO.Path.GetFileName(txtArchive.Text)
+        Select Case d.ShowDialog()
+            Case Windows.Forms.DialogResult.OK
+                Try
+                    Using lockSource As New IO.FileStream(txtArchive.Text, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite)
+                        Using f As New IO.BufferedStream(New IO.FileStream(d.FileName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None))
+                            curArchive.RepackInto(f)
+                        End Using
+                    End Using
+                Catch ex As Exception
+                    Log(ex.ToString)
+                End Try
+        End Select
     End Sub
 End Class

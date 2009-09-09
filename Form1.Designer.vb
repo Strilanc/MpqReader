@@ -25,6 +25,8 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.tabs = New System.Windows.Forms.TabControl()
         Me.tabControls = New System.Windows.Forms.TabPage()
+        Me.btnExplore = New System.Windows.Forms.Button()
+        Me.btnRepack = New System.Windows.Forms.Button()
         Me.txtLog = New System.Windows.Forms.TextBox()
         Me.btnSearchMapForListFiles = New System.Windows.Forms.Button()
         Me.lblArchiveResult = New System.Windows.Forms.Label()
@@ -86,6 +88,8 @@ Partial Class Form1
         'tabControls
         '
         Me.tabControls.AutoScroll = True
+        Me.tabControls.Controls.Add(Me.btnExplore)
+        Me.tabControls.Controls.Add(Me.btnRepack)
         Me.tabControls.Controls.Add(Me.txtLog)
         Me.tabControls.Controls.Add(Me.btnSearchMapForListFiles)
         Me.tabControls.Controls.Add(Me.lblArchiveResult)
@@ -108,6 +112,24 @@ Partial Class Form1
         Me.tabControls.TabIndex = 3
         Me.tabControls.Text = "Controls"
         Me.tabControls.UseVisualStyleBackColor = True
+        '
+        'btnExplore
+        '
+        Me.btnExplore.Location = New System.Drawing.Point(11, 142)
+        Me.btnExplore.Name = "btnExplore"
+        Me.btnExplore.Size = New System.Drawing.Size(117, 20)
+        Me.btnExplore.TabIndex = 18
+        Me.btnExplore.Text = "Explore"
+        Me.btnExplore.UseVisualStyleBackColor = True
+        '
+        'btnRepack
+        '
+        Me.btnRepack.Location = New System.Drawing.Point(125, 267)
+        Me.btnRepack.Name = "btnRepack"
+        Me.btnRepack.Size = New System.Drawing.Size(117, 20)
+        Me.btnRepack.TabIndex = 17
+        Me.btnRepack.Text = "Repack"
+        Me.btnRepack.UseVisualStyleBackColor = True
         '
         'txtLog
         '
@@ -179,7 +201,6 @@ Partial Class Form1
         '
         'btnExtractFileName
         '
-        Me.btnExtractFileName.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnExtractFileName.Enabled = False
         Me.btnExtractFileName.Location = New System.Drawing.Point(371, 201)
         Me.btnExtractFileName.Name = "btnExtractFileName"
@@ -199,8 +220,6 @@ Partial Class Form1
         '
         'txtArchivedFileName
         '
-        Me.txtArchivedFileName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtArchivedFileName.Location = New System.Drawing.Point(11, 202)
         Me.txtArchivedFileName.Name = "txtArchivedFileName"
         Me.txtArchivedFileName.Size = New System.Drawing.Size(353, 20)
@@ -217,7 +236,6 @@ Partial Class Form1
         '
         'btnArchiveBrowse
         '
-        Me.btnArchiveBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnArchiveBrowse.Location = New System.Drawing.Point(371, 124)
         Me.btnArchiveBrowse.Name = "btnArchiveBrowse"
         Me.btnArchiveBrowse.Size = New System.Drawing.Size(97, 20)
@@ -228,8 +246,6 @@ Partial Class Form1
         'txtArchive
         '
         Me.txtArchive.AllowDrop = True
-        Me.txtArchive.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtArchive.Location = New System.Drawing.Point(11, 98)
         Me.txtArchive.Name = "txtArchive"
         Me.txtArchive.Size = New System.Drawing.Size(457, 20)
@@ -482,6 +498,8 @@ Partial Class Form1
     Friend WithEvents lblArchiveResult As System.Windows.Forms.Label
     Friend WithEvents btnSearchMapForListFiles As System.Windows.Forms.Button
     Friend WithEvents txtLog As System.Windows.Forms.TextBox
+    Friend WithEvents btnExplore As System.Windows.Forms.Button
+    Friend WithEvents btnRepack As System.Windows.Forms.Button
 
 
 
