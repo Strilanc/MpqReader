@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Form1
+Partial Class FrmReader
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -25,7 +25,6 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.tabs = New System.Windows.Forms.TabControl()
         Me.tabControls = New System.Windows.Forms.TabPage()
-        Me.btnExplore = New System.Windows.Forms.Button()
         Me.btnRepack = New System.Windows.Forms.Button()
         Me.txtLog = New System.Windows.Forms.TextBox()
         Me.btnSearchMapForListFiles = New System.Windows.Forms.Button()
@@ -42,42 +41,36 @@ Partial Class Form1
         Me.txtArchive = New System.Windows.Forms.TextBox()
         Me.lblListFile = New System.Windows.Forms.Label()
         Me.btnListfileBrowse = New System.Windows.Forms.Button()
-        Me.tabArchive = New System.Windows.Forms.TabPage()
-        Me.gridArchive = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabHashTable = New System.Windows.Forms.TabPage()
         Me.gridHashTable = New System.Windows.Forms.DataGridView()
+        Me.tabBlockTable = New System.Windows.Forms.TabPage()
+        Me.gridFileTable = New System.Windows.Forms.DataGridView()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ColHashIndex = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colLanguage = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colHash = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.tabFileTable = New System.Windows.Forms.TabPage()
-        Me.gridFileTable = New System.Windows.Forms.DataGridView()
-        Me.colName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colIndex = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colSize = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colCompressedSize = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colPosition = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colCompressedSize = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colSize = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colFlags = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.tabs.SuspendLayout()
         Me.tabControls.SuspendLayout()
         CType(Me.numArchivedFileIndex, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tabArchive.SuspendLayout()
-        CType(Me.gridArchive, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabHashTable.SuspendLayout()
         CType(Me.gridHashTable, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tabFileTable.SuspendLayout()
+        Me.tabBlockTable.SuspendLayout()
         CType(Me.gridFileTable, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'tabs
         '
         Me.tabs.Controls.Add(Me.tabControls)
-        Me.tabs.Controls.Add(Me.tabArchive)
         Me.tabs.Controls.Add(Me.tabHashTable)
-        Me.tabs.Controls.Add(Me.tabFileTable)
+        Me.tabs.Controls.Add(Me.tabBlockTable)
         Me.tabs.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tabs.Location = New System.Drawing.Point(0, 0)
         Me.tabs.Name = "tabs"
@@ -88,7 +81,6 @@ Partial Class Form1
         'tabControls
         '
         Me.tabControls.AutoScroll = True
-        Me.tabControls.Controls.Add(Me.btnExplore)
         Me.tabControls.Controls.Add(Me.btnRepack)
         Me.tabControls.Controls.Add(Me.txtLog)
         Me.tabControls.Controls.Add(Me.btnSearchMapForListFiles)
@@ -112,15 +104,6 @@ Partial Class Form1
         Me.tabControls.TabIndex = 3
         Me.tabControls.Text = "Controls"
         Me.tabControls.UseVisualStyleBackColor = True
-        '
-        'btnExplore
-        '
-        Me.btnExplore.Location = New System.Drawing.Point(11, 142)
-        Me.btnExplore.Name = "btnExplore"
-        Me.btnExplore.Size = New System.Drawing.Size(117, 20)
-        Me.btnExplore.TabIndex = 18
-        Me.btnExplore.Text = "Explore"
-        Me.btnExplore.UseVisualStyleBackColor = True
         '
         'btnRepack
         '
@@ -269,47 +252,6 @@ Partial Class Form1
         Me.btnListfileBrowse.Text = "Import List File"
         Me.btnListfileBrowse.UseVisualStyleBackColor = True
         '
-        'tabArchive
-        '
-        Me.tabArchive.Controls.Add(Me.gridArchive)
-        Me.tabArchive.Location = New System.Drawing.Point(4, 22)
-        Me.tabArchive.Name = "tabArchive"
-        Me.tabArchive.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabArchive.Size = New System.Drawing.Size(475, 429)
-        Me.tabArchive.TabIndex = 2
-        Me.tabArchive.Text = "Archive"
-        Me.tabArchive.UseVisualStyleBackColor = True
-        '
-        'gridArchive
-        '
-        Me.gridArchive.AllowUserToAddRows = False
-        Me.gridArchive.AllowUserToDeleteRows = False
-        Me.gridArchive.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.gridArchive.ColumnHeadersVisible = False
-        Me.gridArchive.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4})
-        Me.gridArchive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gridArchive.Location = New System.Drawing.Point(3, 3)
-        Me.gridArchive.Name = "gridArchive"
-        Me.gridArchive.ReadOnly = True
-        Me.gridArchive.Size = New System.Drawing.Size(362, 358)
-        Me.gridArchive.TabIndex = 2
-        '
-        'DataGridViewTextBoxColumn3
-        '
-        Me.DataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.DataGridViewTextBoxColumn3.HeaderText = "Name"
-        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        Me.DataGridViewTextBoxColumn3.ReadOnly = True
-        Me.DataGridViewTextBoxColumn3.Width = 5
-        '
-        'DataGridViewTextBoxColumn4
-        '
-        Me.DataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.DataGridViewTextBoxColumn4.HeaderText = "Value"
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        Me.DataGridViewTextBoxColumn4.ReadOnly = True
-        Me.DataGridViewTextBoxColumn4.Width = 5
-        '
         'tabHashTable
         '
         Me.tabHashTable.Controls.Add(Me.gridHashTable)
@@ -326,13 +268,51 @@ Partial Class Form1
         Me.gridHashTable.AllowUserToAddRows = False
         Me.gridHashTable.AllowUserToDeleteRows = False
         Me.gridHashTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.gridHashTable.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.colLanguage, Me.colHash})
+        Me.gridHashTable.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColHashIndex, Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.colLanguage, Me.colHash})
         Me.gridHashTable.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridHashTable.Location = New System.Drawing.Point(3, 3)
         Me.gridHashTable.Name = "gridHashTable"
         Me.gridHashTable.ReadOnly = True
-        Me.gridHashTable.Size = New System.Drawing.Size(362, 358)
+        Me.gridHashTable.Size = New System.Drawing.Size(469, 423)
         Me.gridHashTable.TabIndex = 2
+        '
+        'tabBlockTable
+        '
+        Me.tabBlockTable.Controls.Add(Me.gridFileTable)
+        Me.tabBlockTable.Location = New System.Drawing.Point(4, 22)
+        Me.tabBlockTable.Name = "tabBlockTable"
+        Me.tabBlockTable.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabBlockTable.Size = New System.Drawing.Size(475, 429)
+        Me.tabBlockTable.TabIndex = 1
+        Me.tabBlockTable.Text = "Block Table"
+        Me.tabBlockTable.UseVisualStyleBackColor = True
+        '
+        'gridFileTable
+        '
+        Me.gridFileTable.AllowUserToAddRows = False
+        Me.gridFileTable.AllowUserToDeleteRows = False
+        Me.gridFileTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.gridFileTable.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.colIndex, Me.colName, Me.colPosition, Me.colCompressedSize, Me.colSize, Me.colFlags})
+        Me.gridFileTable.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gridFileTable.Location = New System.Drawing.Point(3, 3)
+        Me.gridFileTable.Name = "gridFileTable"
+        Me.gridFileTable.ReadOnly = True
+        Me.gridFileTable.Size = New System.Drawing.Size(469, 423)
+        Me.gridFileTable.TabIndex = 1
+        '
+        'ToolTip1
+        '
+        Me.ToolTip1.AutoPopDelay = 5000
+        Me.ToolTip1.InitialDelay = 100
+        Me.ToolTip1.ReshowDelay = 100
+        '
+        'ColHashIndex
+        '
+        Me.ColHashIndex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.ColHashIndex.HeaderText = "ID"
+        Me.ColHashIndex.Name = "ColHashIndex"
+        Me.ColHashIndex.ReadOnly = True
+        Me.ColHashIndex.Width = 43
         '
         'DataGridViewTextBoxColumn1
         '
@@ -345,10 +325,10 @@ Partial Class Form1
         'DataGridViewTextBoxColumn2
         '
         Me.DataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.DataGridViewTextBoxColumn2.HeaderText = "File Table Index"
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Block Index"
         Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
         Me.DataGridViewTextBoxColumn2.ReadOnly = True
-        Me.DataGridViewTextBoxColumn2.Width = 107
+        Me.DataGridViewTextBoxColumn2.Width = 88
         '
         'colLanguage
         '
@@ -366,29 +346,13 @@ Partial Class Form1
         Me.colHash.ReadOnly = True
         Me.colHash.Width = 114
         '
-        'tabFileTable
+        'colIndex
         '
-        Me.tabFileTable.Controls.Add(Me.gridFileTable)
-        Me.tabFileTable.Location = New System.Drawing.Point(4, 22)
-        Me.tabFileTable.Name = "tabFileTable"
-        Me.tabFileTable.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabFileTable.Size = New System.Drawing.Size(475, 429)
-        Me.tabFileTable.TabIndex = 1
-        Me.tabFileTable.Text = "File Table"
-        Me.tabFileTable.UseVisualStyleBackColor = True
-        '
-        'gridFileTable
-        '
-        Me.gridFileTable.AllowUserToAddRows = False
-        Me.gridFileTable.AllowUserToDeleteRows = False
-        Me.gridFileTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.gridFileTable.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.colName, Me.colIndex, Me.colSize, Me.colCompressedSize, Me.colPosition, Me.colFlags})
-        Me.gridFileTable.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gridFileTable.Location = New System.Drawing.Point(3, 3)
-        Me.gridFileTable.Name = "gridFileTable"
-        Me.gridFileTable.ReadOnly = True
-        Me.gridFileTable.Size = New System.Drawing.Size(362, 358)
-        Me.gridFileTable.TabIndex = 1
+        Me.colIndex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.colIndex.HeaderText = "Block Index"
+        Me.colIndex.Name = "colIndex"
+        Me.colIndex.ReadOnly = True
+        Me.colIndex.Width = 88
         '
         'colName
         '
@@ -398,30 +362,6 @@ Partial Class Form1
         Me.colName.ReadOnly = True
         Me.colName.Width = 60
         '
-        'colIndex
-        '
-        Me.colIndex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.colIndex.HeaderText = "Index"
-        Me.colIndex.Name = "colIndex"
-        Me.colIndex.ReadOnly = True
-        Me.colIndex.Width = 58
-        '
-        'colSize
-        '
-        Me.colSize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.colSize.HeaderText = "Actual Size"
-        Me.colSize.Name = "colSize"
-        Me.colSize.ReadOnly = True
-        Me.colSize.Width = 85
-        '
-        'colCompressedSize
-        '
-        Me.colCompressedSize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.colCompressedSize.HeaderText = "Compressed Size"
-        Me.colCompressedSize.Name = "colCompressedSize"
-        Me.colCompressedSize.ReadOnly = True
-        Me.colCompressedSize.Width = 113
-        '
         'colPosition
         '
         Me.colPosition.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
@@ -430,31 +370,45 @@ Partial Class Form1
         Me.colPosition.ReadOnly = True
         Me.colPosition.Width = 60
         '
+        'colCompressedSize
+        '
+        Me.colCompressedSize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.colCompressedSize.HeaderText = "Length"
+        Me.colCompressedSize.Name = "colCompressedSize"
+        Me.colCompressedSize.ReadOnly = True
+        Me.colCompressedSize.Width = 65
+        '
+        'colSize
+        '
+        Me.colSize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.colSize.HeaderText = "File Size"
+        Me.colSize.Name = "colSize"
+        Me.colSize.ReadOnly = True
+        Me.colSize.Width = 71
+        '
         'colFlags
         '
         Me.colFlags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.colFlags.HeaderText = "Flags"
+        Me.colFlags.HeaderText = "Properties"
         Me.colFlags.Name = "colFlags"
         Me.colFlags.ReadOnly = True
-        Me.colFlags.Width = 57
+        Me.colFlags.Width = 79
         '
-        'Form1
+        'FrmReader
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(483, 455)
         Me.Controls.Add(Me.tabs)
-        Me.Name = "Form1"
+        Me.Name = "FrmReader"
         Me.Text = "Mpq Reader"
         Me.tabs.ResumeLayout(False)
         Me.tabControls.ResumeLayout(False)
         Me.tabControls.PerformLayout()
         CType(Me.numArchivedFileIndex, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tabArchive.ResumeLayout(False)
-        CType(Me.gridArchive, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabHashTable.ResumeLayout(False)
         CType(Me.gridHashTable, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tabFileTable.ResumeLayout(False)
+        Me.tabBlockTable.ResumeLayout(False)
         CType(Me.gridFileTable, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -462,13 +416,13 @@ Partial Class Form1
     Friend WithEvents tabs As System.Windows.Forms.TabControl
     Friend WithEvents tabHashTable As System.Windows.Forms.TabPage
 
-    Friend WithEvents tabFileTable As System.Windows.Forms.TabPage
+    Friend WithEvents tabBlockTable As System.Windows.Forms.TabPage
     Friend WithEvents gridFileTable As System.Windows.Forms.DataGridView
     Friend WithEvents gridHashTable As System.Windows.Forms.DataGridView
-    Friend WithEvents tabArchive As System.Windows.Forms.TabPage
-    Friend WithEvents gridArchive As System.Windows.Forms.DataGridView
-    Friend WithEvents DataGridViewTextBoxColumn3 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn4 As System.Windows.Forms.DataGridViewTextBoxColumn
+
+
+
+
     Friend WithEvents DataGridViewTextBoxColumn1 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents colLanguage As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -498,8 +452,9 @@ Partial Class Form1
     Friend WithEvents lblArchiveResult As System.Windows.Forms.Label
     Friend WithEvents btnSearchMapForListFiles As System.Windows.Forms.Button
     Friend WithEvents txtLog As System.Windows.Forms.TextBox
-    Friend WithEvents btnExplore As System.Windows.Forms.Button
+
     Friend WithEvents btnRepack As System.Windows.Forms.Button
+    Friend WithEvents ColHashIndex As System.Windows.Forms.DataGridViewTextBoxColumn
 
 
 
