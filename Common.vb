@@ -1,8 +1,7 @@
 ﻿Imports Mpq
 Imports Strilbrary.Threading
-Imports Strilbrary
 Imports Strilbrary.Streams
-Imports Strilbrary.Enumeration
+Imports Strilbrary.Values
 
 Friend Module Common
     <Extension()>

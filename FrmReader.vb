@@ -1,7 +1,6 @@
-﻿Imports Mpq
-Imports Strilbrary.Threading
+﻿Imports Strilbrary.Threading
+Imports Strilbrary.Values
 Imports Strilbrary.Streams
-Imports Strilbrary
 
 Public Class FrmReader
     Private curArchive As MPQ.Archive
@@ -59,8 +58,6 @@ Public Class FrmReader
         gridHashTable.Rows.Clear()
         curArchive = New MPQ.Archive(path)
 
-        gridFileTable.Rows.Add("(Use 'explore' to load file table)")
-        gridHashTable.Rows.Add("(Use 'explore' to load file table)")
         Try
             listFile.IncludeArchiveListFile(curArchive)
         Catch e As Exception
