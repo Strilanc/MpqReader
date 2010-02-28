@@ -146,7 +146,7 @@ Friend Module Common
         Dim result = New HashSet(Of String)
         If Not archive.hashTable.contains(filename) Then Return result
 
-        Using reader = New IO.StreamReader(archive.OpenFileByName(filename))
+        Using reader = New IO.StreamReader(archive.OpenFileByName(filename).AsStream)
             Do Until reader.EndOfStream
                 result.IncludeRange(archive.SearchForFilenames_Filename(reader.ReadLine()))
             Loop
@@ -163,7 +163,7 @@ Friend Module Common
         Dim result = New HashSet(Of String)
         If Not archive.hashTable.contains(filename) Then Return result
 
-        Using reader = New IO.StreamReader(New IO.BufferedStream(archive.OpenFileByName(filename)))
+        Using reader = New IO.StreamReader(New IO.BufferedStream(archive.OpenFileByName(filename).AsStream))
             Do Until reader.EndOfStream
                 Dim line = reader.ReadLine()
                 Dim quotedString As String = Nothing
@@ -200,7 +200,7 @@ Friend Module Common
         Dim result = New HashSet(Of String)
         If Not archive.hashTable.contains(filename) Then Return result
 
-        Using s = New IO.BufferedStream(archive.OpenFileByName(filename))
+        Using s = New IO.BufferedStream(archive.OpenFileByName(filename).AsStream)
             Dim curString = New System.Text.StringBuilder
             Do
                 Dim c = s.ReadByte()
@@ -289,10 +289,10 @@ Friend Module Common
                 If listFile.Contains(h.FileKey) Then
                     mpqFilename = listFile(h.FileKey)
                     Contract.Assume(mpqFilename IsNot Nothing)
-                    mpqFileStream = archive.OpenFileByName(mpqFilename)
+                    mpqFileStream = archive.OpenFileByName(mpqFilename).AsStream
                 Else
                     mpqFilename = "Unknown{0}".Frmt(h.FileKey)
-                    mpqFileStream = archive.OpenFileInBlock(h.BlockIndex)
+                    mpqFileStream = archive.OpenFileInBlock(h.BlockIndex).AsStream
                 End If
 
                 'Create sub directories as necessary

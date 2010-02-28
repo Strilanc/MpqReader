@@ -56,7 +56,7 @@ Public Class FrmReader
         Log("Loading archive at {0}...".frmt(IO.Path.GetFileName(path)))
         gridFileTable.Rows.Clear()
         gridHashTable.Rows.Clear()
-        curArchive = New MPQ.Archive(path)
+        curArchive = MPQ.Archive.FromFile(path)
 
         Try
             listFile.IncludeArchiveListFile(curArchive)
@@ -204,7 +204,7 @@ Public Class FrmReader
             Case Windows.Forms.DialogResult.OK
                 My.Settings.lastSaveFolder = IO.Path.GetDirectoryName(d.FileName)
                 Try
-                    Using file = curArchive.OpenFileByName(txtArchivedFileName.Text)
+                    Using file = curArchive.OpenFileByName(txtArchivedFileName.Text).AsStream
                         file.WriteToFileSystem(d.FileName)
                     End Using
                 Catch ex As Exception
@@ -222,7 +222,7 @@ Public Class FrmReader
             Case Windows.Forms.DialogResult.OK
                 My.Settings.lastSaveFolder = IO.Path.GetDirectoryName(d.FileName)
                 Try
-                    Using file = curArchive.OpenFileInBlock(CUInt(numArchivedFileIndex.Value))
+                    Using file = curArchive.OpenFileInBlock(CUInt(numArchivedFileIndex.Value)).AsStream
                         file.WriteToFileSystem(d.FileName)
                     End Using
                 Catch ex As Exception
@@ -256,7 +256,7 @@ Public Class FrmReader
                 My.Settings.lastArchiveFolder = IO.Path.GetDirectoryName(d.FileName)
                 My.Settings.Save()
                 Try
-                    Call New MPQ.Archive(d.FileName).AsyncSearchForFilenames(AddressOf Log).QueueCallOnValueSuccess(ref,
+                    Call MPQ.Archive.FromFile(d.FileName).AsyncSearchForFilenames(AddressOf Log).QueueCallOnValueSuccess(ref,
                         Sub(ret) UpdateInternalListFile(ret.ToList))
                 Catch ex As Exception
                     Log(ex.ToString)
