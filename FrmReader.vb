@@ -5,16 +5,16 @@ Imports Strilbrary.Streams
 Public Class FrmReader
     Private curArchive As MPQ.Archive
     Private listFile As New MPQ.ListFile()
-    Private ReadOnly ref As New InvokedCallQueue(Me)
+    Private ReadOnly ref As New InvokedCallQueue(Me, initiallyStarted:=True)
 
-    Private Function LoadInternalListFile() As IFuture
+    Private Function LoadInternalListFile() As Task
         Return ImportListFile(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) +
                               IO.Path.DirectorySeparatorChar +
                               "MpqReader" +
                               IO.Path.DirectorySeparatorChar +
                               "listfile.txt")
     End Function
-    Private Function ImportListFile(ByVal path As String) As IFuture
+    Private Function ImportListFile(ByVal path As String) As Task
         Return ThreadPooledFunc(
             Function()
                 Dim filenames = New List(Of String)
@@ -24,30 +24,34 @@ Public Class FrmReader
                     Loop
                 End Using
 
-                Return ref.QueueAction(Sub() UpdateInternalListFile(filenames))
-            End Function).Defuturized
+                Return ref.QueueAction(Sub() UpdateInternalListFile(filenames, saveResult:=False))
+            End Function).Unwrap
     End Function
-    Private Function SaveInternalListFile() As IFuture
-        Dim filenames = listFile.Filenames.ToArray()
+    Private Function SaveInternalListFile() As Task
+        Dim filenames = listFile.IncludedStrings.ToArray()
 
         Return ThreadPooledAction(
             Sub()
-                Dim path = IO.Path.Combine(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                                           "MpqReader"),
-                                                           "listfile.txt")
-                If Not IO.Directory.Exists(path) Then  IO.Directory.CreateDirectory(path)
-                Using w = New IO.StreamWriter(New IO.FileStream(path, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None))
-                    For Each key In filenames
-                        w.WriteLine(key)
-                    Next key
-                End Using
-                Log("Internal list file saved.")
+                Try
+                    Dim path = IO.Path.Combine(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                                               "MpqReader"),
+                                                               "listfile.txt")
+                    If Not IO.Directory.Exists(IO.Path.GetDirectoryName(path)) Then IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(path))
+                    Using w = New IO.StreamWriter(New IO.FileStream(path, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None))
+                        For Each key In filenames
+                            w.WriteLine(key)
+                        Next key
+                    End Using
+                    Log("Internal list file saved.")
+                Catch ex As Exception
+                    Log(ex.ToString)
+                End Try
             End Sub)
     End Function
-    Private Sub UpdateInternalListFile(ByVal newEntries As IList(Of String))
+    Private Sub UpdateInternalListFile(ByVal newEntries As IList(Of String), ByVal saveResult As Boolean)
         Dim n = listFile.IncludeRangeCountAdded(newEntries)
-        Log("Added {0} new entries to internal list file, totalling {1}.".Frmt(n, listFile.Size))
-        If n > 0 Then
+        Log("Added {0} new entries to internal list file, totalling {1}.".Frmt(n, listFile.Count))
+        If n > 0 AndAlso saveResult Then
             SaveInternalListFile()
         End If
     End Sub
@@ -79,7 +83,7 @@ Public Class FrmReader
         For Each entry In archive.Hashtable.Entries
             If archive IsNot curArchive Then Return
             Dim status = "{0} (Invalid)".Frmt(entry.BlockIndex)
-            Dim name = If(listFile.Contains(entry.FileKey), listFile(entry.FileKey), "[0x{0}]".Frmt(entry.FileKey))
+            Dim name = If(listFile.Contains(entry.FileKey), listFile(entry.FileKey).Value, "[0x{0}]".Frmt(entry.FileKey))
             If entry.FileKey = ULong.MaxValue Then name = "[Empty]"
             If Not entry.Invalid OrElse entry.BlockIndex.EnumValueIsDefined Then
                 status = entry.BlockIndex.ToString
@@ -256,8 +260,8 @@ Public Class FrmReader
                 My.Settings.lastArchiveFolder = IO.Path.GetDirectoryName(d.FileName)
                 My.Settings.Save()
                 Try
-                    Call MPQ.Archive.FromFile(d.FileName).AsyncSearchForFilenames(AddressOf Log).QueueCallOnValueSuccess(ref,
-                        Sub(ret) UpdateInternalListFile(ret.ToList))
+                    Call MPQ.Archive.FromFile(d.FileName).AsyncSearchForFilenames(AddressOf Log).QueueContinueWithAction(ref,
+                        Sub(ret) UpdateInternalListFile(ret.ToList, saveResult:=True))
                 Catch ex As Exception
                     Log(ex.ToString)
                 End Try

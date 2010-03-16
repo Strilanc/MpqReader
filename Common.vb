@@ -19,44 +19,53 @@ Friend Module Common
         Return result
     End Function
 
-    Public Function AsyncReadListfile(ByVal path As String) As IFuture(Of MPQ.ListFile)
+    Public Function AsyncReadListfile(ByVal path As String, ByVal logger As Action(Of String)) As Task(Of MPQ.ListFile)
         Contract.Requires(path IsNot Nothing)
-        Contract.Ensures(Contract.Result(Of IFuture(Of MPQ.ListFile))() IsNot Nothing)
+        Contract.Ensures(Contract.Result(Of Task(Of MPQ.ListFile))() IsNot Nothing)
         Return ThreadPooledFunc(
             Function()
-                Dim result = New MPQ.ListFile
-                Using sr = New IO.StreamReader(New IO.FileStream(path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read))
-                    Do Until sr.EndOfStream
-                        result.Include(sr.ReadLine)
-                    Loop
-                End Using
-                Return result
+                Try
+                    Dim result = New MPQ.ListFile
+                    Using sr = New IO.StreamReader(New IO.FileStream(path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read))
+                        Do Until sr.EndOfStream
+                            result.Include(sr.ReadLine)
+                        Loop
+                    End Using
+                    Return result
+                Catch ex As Exception
+                    logger(ex.ToString)
+                    Return Nothing
+                End Try
             End Function)
     End Function
 
     <Extension()>
-    Public Function AsyncSaveListFile(ByVal this As MPQ.ListFile) As IFuture
+    Public Function AsyncSaveListFile(ByVal this As MPQ.ListFile, ByVal logger As Action(Of String)) As Task
         Contract.Requires(this IsNot Nothing)
-        Contract.Ensures(Contract.Result(Of ifuture)() IsNot Nothing)
-        Dim filenames = this.Filenames.ToArray()
+        Contract.Ensures(Contract.Result(Of Task)() IsNot Nothing)
+        Dim filenames = this.IncludedStrings.ToArray()
 
         Return ThreadPooledAction(
             Sub()
-                Dim path = IO.Path.Combine(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                                           "MpqReader"),
-                                                           "listfile.txt")
-                If Not IO.Directory.Exists(path) Then  IO.Directory.CreateDirectory(path)
-                Using w = New IO.StreamWriter(New IO.FileStream(path, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None))
-                    For Each key In filenames
-                        w.WriteLine(key)
-                    Next key
-                End Using
+                Try
+                    Dim path = IO.Path.Combine(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                                               "MpqReader"),
+                                                               "listfile.txt")
+                    If Not IO.Directory.Exists(path) Then IO.Directory.CreateDirectory(path)
+                    Using w = New IO.StreamWriter(New IO.FileStream(path, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None))
+                        For Each key In filenames
+                            w.WriteLine(key)
+                        Next key
+                    End Using
+                Catch ex As Exception
+                    logger(ex.ToString)
+                End Try
             End Sub)
     End Function
 
     <Extension()> <Pure()>
     Public Function AsyncSearchForFilenames(ByVal archive As MPQ.Archive,
-                                            ByVal logger As Action(Of String)) As IFuture(Of IEnumerable(Of String))
+                                            ByVal logger As Action(Of String)) As Task(Of IEnumerable(Of String))
         Return ThreadPooledFunc(
             Function()
                 Dim result = New HashSet(Of String)
@@ -133,7 +142,7 @@ Friend Module Common
                     adder(result, archive.SearchForFilenames_ObjectData(filename))
                 Next filename
 
-                Return result
+                Return result.AsEnumerable
             End Function)
     End Function
     <Pure()> <Extension()>
