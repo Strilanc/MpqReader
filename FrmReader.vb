@@ -1,6 +1,7 @@
 ﻿Imports Strilbrary.Threading
 Imports Strilbrary.Values
 Imports Strilbrary.Streams
+Imports Strilbrary.Collections
 
 Public Class FrmReader
     Private curArchive As MPQ.Archive
@@ -83,7 +84,18 @@ Public Class FrmReader
         For Each entry In archive.Hashtable.Entries
             If archive IsNot curArchive Then Return
             Dim status = "{0} (Invalid)".Frmt(entry.BlockIndex)
-            Dim name = If(listFile.Contains(entry.FileKey), listFile(entry.FileKey).Value, "[0x{0}]".Frmt(entry.FileKey))
+            Dim name = "[0x{0}]".Frmt(entry.FileKey)
+            If listFile.Contains(entry.FileKey) Then
+                name = listFile(entry.FileKey)
+            Else
+                Try
+                    Using f = archive.OpenFileInBlock(entry.BlockIndex)
+                        name += ".{0}".Frmt(If(TryDetectFileType(f), "?"))
+                    End Using
+                Catch ex As Exception
+                    name += " (error)"
+                End Try
+            End If
             If entry.FileKey = ULong.MaxValue Then name = "[Empty]"
             If Not entry.Invalid OrElse entry.BlockIndex.EnumValueIsDefined Then
                 status = entry.BlockIndex.ToString

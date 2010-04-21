@@ -2,6 +2,7 @@
 Imports Strilbrary.Threading
 Imports Strilbrary.Streams
 Imports Strilbrary.Values
+Imports Strilbrary.Collections
 
 Friend Module Common
     <Extension()>
@@ -282,46 +283,62 @@ Friend Module Common
         Contract.Requires(archive IsNot Nothing)
         Contract.Requires(folder IsNot Nothing)
         Contract.Requires(listFile IsNot Nothing)
-        folder = folder.Replace(IO.Path.AltDirectorySeparatorChar, IO.Path.DirectorySeparatorChar)
-        If Not folder.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.CurrentCulture) Then
-            folder += IO.Path.AltDirectorySeparatorChar
-        End If
 
         listFile.IncludeArchiveListFile(archive)
         For Each h As MPQ.HashEntry In archive.Hashtable.Entries
             If h.BlockIndex = Hashtable.BlockIndex.DeletedFile Then Continue For
             If h.BlockIndex = Hashtable.BlockIndex.NoFile Then Continue For
             Dim mpqFilename = ""
-            Dim mpqFileStream As IO.Stream = Nothing
+            Dim mpqFileStream As IRandomReadableStream = Nothing
             Try
                 'Open file
                 If listFile.Contains(h.FileKey) Then
                     mpqFilename = listFile(h.FileKey)
                     Contract.Assume(mpqFilename IsNot Nothing)
-                    mpqFileStream = archive.OpenFileByName(mpqFilename).AsStream
+                    mpqFileStream = archive.OpenFileByName(mpqFilename)
                 Else
-                    mpqFilename = "Unknown{0}".Frmt(h.FileKey)
-                    mpqFileStream = archive.OpenFileInBlock(h.BlockIndex).AsStream
+                    mpqFileStream = archive.OpenFileInBlock(h.BlockIndex)
+                    Dim ext = TryDetectFileType(mpqFileStream)
+                    mpqFileStream.Position = 0
+                    mpqFilename = "Unknown{0}".Frmt(h.FileKey) + If(ext IsNot Nothing, "." + ext, "")
                 End If
 
                 'Create sub directories as necessary
                 Dim subfolders = mpqFilename.Split("\"c)
                 Dim curFolder = folder
-                For Each subFolder In subfolders
+                For Each subFolder In subfolders.SkipLast(1)
                     curFolder = IO.Path.Combine(curFolder, subFolder)
                     If Not IO.Directory.Exists(curFolder) Then IO.Directory.CreateDirectory(curFolder)
                 Next subFolder
 
                 'Write to file
                 Dim buffer(0 To 511) As Byte
-                mpqFileStream.WriteToFileSystem(curFolder + mpqFilename.Split("\"c).Last)
+                mpqFileStream.AsStream.WriteToFileSystem(IO.Path.Combine(curFolder, mpqFilename.Split("\"c).Last))
                 Debug.Print("Extracted {0}".Frmt(mpqFilename))
-            Catch e As IO.InvalidDataException
-                Debug.Print("Invalid data exception hit in {0}: {1}".Frmt(mpqFilename, e))
-            Catch e As IO.IOException
-                Debug.Print("IO exception hit in {0}: {1}".Frmt(mpqFilename, e))
+            Catch e As Exception
+                Debug.Print("Exception hit in {0}: {1}".Frmt(mpqFilename, e))
             End Try
-            If mpqFileStream IsNot Nothing Then mpqFileStream.Close()
+            If mpqFileStream IsNot Nothing Then mpqFileStream.Dispose()
         Next h
     End Sub
+
+    Public Function TryDetectFileType(ByVal stream As IRandomReadableStream) As String
+        If stream.Position <> 0 Then stream.Position = 0
+        Dim start = stream.ReadBestEffort(4).ToAsciiChars.AsString
+        If start.StartsWith("BLP") Then
+            Return "blp"
+        ElseIf start.StartsWith("MDLX") Then
+            Return "mdx"
+        ElseIf start.StartsWith("ID3") Then
+            Return "mp3"
+        End If
+
+        stream.Position = Math.Max(stream.Length - 26, 0)
+        Dim endData = stream.ReadBestEffort(26).ToAsciiChars.AsString
+        If endData.SkipLast(1).AsString.EndsWith("TRUEVISION-XFILE.") Then
+            Return "tga"
+        End If
+
+        Return Nothing
+    End Function
 End Module
